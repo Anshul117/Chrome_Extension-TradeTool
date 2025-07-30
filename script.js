@@ -1,11 +1,13 @@
 let myLead = []
 let input = document.getElementById("input-el")
+let note = document.getElementById("note-el")
 let save = document.getElementById("input-btn")
 let list = document.getElementById("ul-el")
 let del = document.getElementById("delete-btn")
 let saveTab = document.getElementById("tab-btn")
-const myLeadFromStorage = JSON.parse(localStorage.getItem("myLead"))
 
+const myLeadFromStorage = JSON.parse(localStorage.getItem("myLead"))
+console.log(myLead)
 if(myLeadFromStorage){
     myLead = myLeadFromStorage
     render(myLead)
@@ -14,7 +16,8 @@ if(myLeadFromStorage){
 saveTab.addEventListener("click" ,()=>{  //
     chrome.tabs.query({active:true , currentWindow:true}, function(tab){
         let url = tab[0].url
-        myLead.push(url)
+        let noteText = note.value
+        myLead.push({url,noteText})
         localStorage.setItem("myLead" , JSON.stringify(myLead))
         render(myLead) 
     })
@@ -24,7 +27,8 @@ function render(leads){
     let li = ""
    for(let i = 0 ; i<leads.length ; i++){
         li+= ` <li>  
-                    <a target = '_blank' href = "${leads[i]}"> ${leads[i]}</a> 
+                    <a target = '_blank' href = "${leads[i].url}"> ${leads[i].url}</a>
+                    <p>"${leads[i].noteText}"</p> 
                 </li>`
    }
    list.innerHTML=li
@@ -38,9 +42,13 @@ del.addEventListener("dblclick" , ()=>{
 
 
 save.addEventListener("click" , ()=>{
-    myLead.push(input.value)
+        let url = input.value
+        let noteText = note.value
+    myLead.push({url,noteText})
     localStorage.setItem("myLead" , JSON.stringify(myLead))
     render(myLead)
     input.value = ""
+    note.value = ""
+   
 })
 

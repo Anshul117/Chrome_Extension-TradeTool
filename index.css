@@ -24,6 +24,10 @@ button {
         background: white;
         color : #5f9341
 }
+#note-el{
+    color: red;
+    font-weight: bold;
+}
 
 ul {
     margin-top: 20px;
